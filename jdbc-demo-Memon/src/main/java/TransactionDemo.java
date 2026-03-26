@@ -99,3 +99,84 @@ public class TransactionDemo {
 - Hamlog manually commit ya rollback kar rhe(conn.rollback()) but Spring ye sab internally handle kar lega with help of annotation(@Transactional). Bas bta dena hai ye piece of code Transaction hai.
 
  */
+
+/*
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+
+public class TransactionExample {
+
+    public static void main(String[] args) {
+
+        Connection con = null;
+        PreparedStatement debit = null;
+        PreparedStatement credit = null;
+
+        try {
+            // 1️⃣ Load Driver (optional in newer versions)
+            Class.forName("com.mysql.cj.jdbc.Driver");
+
+            // 2️⃣ Create Connection
+            con = DriverManager.getConnection(
+                    "jdbc:mysql://localhost:3306/test",
+                    "root",
+                    "password"
+            );
+
+            // 3️⃣ Disable AutoCommit
+            con.setAutoCommit(false);
+
+            // 4️⃣ Prepare Queries
+            debit = con.prepareStatement(
+                    "UPDATE account SET balance = balance - ? WHERE id = ?"
+            );
+
+            credit = con.prepareStatement(
+                    "UPDATE account SET balance = balance + ? WHERE id = ?"
+            );
+
+            // 5️⃣ Set Values
+            debit.setInt(1, 1000); // amount
+            debit.setInt(2, 1);    // from account
+
+            credit.setInt(1, 1000); // amount
+            credit.setInt(2, 2);    // to account
+
+            // 6️⃣ Execute Queries
+            debit.executeUpdate();
+
+            // 🔥 Simulate error (uncomment to test rollback)
+            // int x = 10 / 0;
+
+            credit.executeUpdate();
+
+            // 7️⃣ Commit if everything successful
+            con.commit();
+            System.out.println("✅ Transaction Successful");
+
+        } catch (Exception e) {
+
+            try {
+                if (con != null) {
+                    con.rollback(); // rollback on error
+                    System.out.println("❌ Transaction Rolled Back");
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+
+            e.printStackTrace();
+
+        } finally {
+            try {
+                if (debit != null) debit.close();
+                if (credit != null) credit.close();
+                if (con != null) con.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}
+ */
